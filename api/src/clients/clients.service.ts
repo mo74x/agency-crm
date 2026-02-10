@@ -9,7 +9,7 @@ import { PrismaService } from 'src/prisma/prisma.service'; // Import your new se
 
 @Injectable()
 export class ClientsService {
-  constructor(private prisma: PrismaService) { } // Inject Prisma
+  constructor(private prisma: PrismaService) {} // Inject Prisma
 
   private async getAgency(userId: string) {
     return this.prisma.agency.upsert({
