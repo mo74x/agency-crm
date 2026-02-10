@@ -9,23 +9,17 @@ import { PrismaService } from 'src/prisma/prisma.service'; // Import your new se
 
 @Injectable()
 export class ClientsService {
-  constructor(private prisma: PrismaService) {} // Inject Prisma
+  constructor(private prisma: PrismaService) { } // Inject Prisma
 
   private async getAgency(userId: string) {
-    let agency = await this.prisma.agency.findUnique({
+    return this.prisma.agency.upsert({
       where: { authId: userId },
+      update: {}, // If it exists, do nothing
+      create: {
+        name: 'My New Agency',
+        authId: userId,
+      },
     });
-
-    if (!agency) {
-      // First time login? Create their Agency automatically.
-      agency = await this.prisma.agency.create({
-        data: {
-          name: 'My New Agency', // Default name
-          authId: userId,
-        },
-      });
-    }
-    return agency;
   }
 
   async create(createClientDto: CreateClientDto, userId: string) {
